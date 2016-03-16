@@ -1,27 +1,67 @@
-# Laravel PHP Framework
+# 说明
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+[maatwebsite/excel](https://github.com/Maatwebsite/Laravel-Excel) 是一款强大的 Excel 文件处理扩展包, 使用它能非常快速的完成常用的解析/导出 Excel 功能.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+> 本项目由 [The EST Group](http://est-group.org/) 团队整理发布, 首发地为 [PHPHub 社区](https://phphub.org/), 关于 PHPHub 社区往期的开源作品可 [在此](https://phphub.org/topics/1531) 查看.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## 具体安装说明
 
-## Official Documentation
+请访问此地址: 
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+## 安装
 
-## Contributing
+本项目使用 [Laravel](https://laravel.com/docs/5.2) ( [中文文档见此](http://laravel-china.org/docs/5.0) ), 本地开发环境使用 [Homestead](http://laravel-china.org/docs/5.0/homestead) 进行快速部署. 
+下文将在默认读者已经安装好 `Homestead` 情况下进行说明.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+### 1. 克隆代码
 
-## Security Vulnerabilities
+    https://github.com/zhengjinghua/est-excel-demo.git
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+### 2. 配置本地的 homestead 环境
 
-## License
+编辑文件:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+    homestead edit
+
+对应加入修改:
+
+    folders:
+        - map: /Users/.../est-excel-demo {你的本地项目地址}
+          to: /home/vagrant/est-excel-demo
+
+    sites:
+        - map: image.app
+          to: /home/vagrant/est-excel-demo/public
+
+    databases:
+        - excel
+
+应用修改:
+
+    homestead provision
+
+### 3. 安装依赖
+
+    composer install
+   
+### 4. 生成配置文件
+
+复制 `.env.example` 为 `.env`
+
+```
+cp .env.example .env
+```
+
+由于此项目没有使用其他复杂的逻辑, 因此无需做其他额外的配置
+
+### 5. 修改 hosts
+
+	sudo vi /etc/hosts
+
+添加
+
+	192.168.10.10  	excel.app
+	
+配置完以后浏览器直接访问 http://excel.app 即可
+
+
