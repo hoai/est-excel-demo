@@ -1,67 +1,89 @@
-# 说明
+## [中文文档阅读](#)
 
-[maatwebsite/excel](https://github.com/Maatwebsite/Laravel-Excel) 是一款强大的 Excel 文件处理扩展包, 使用它能非常快速的完成常用的解析/导出 Excel 功能.
+## Description
 
-> 本项目由 [The EST Group](http://est-group.org/) 团队整理发布, 首发地为 [PHPHub 社区](https://phphub.org/), 关于 PHPHub 社区往期的开源作品可 [在此](https://phphub.org/topics/1531) 查看.
+[Laravel Excel](https://github.com/Maatwebsite/Laravel-Excel) brings the power of PHPOffice's PHPExcel to Laravel 5 with a touch of the Laravel Magic. It includes features like: importing Excel and CSV to collections, exporting models, array's and views to Excel, importing batches of files and importing a file by a config file.
 
-## 具体安装说明
+This project is very simple demo to show you how to use the laravel excel package quickly.
 
-请访问此地址: 
+> This project was created by [The EST Group](http://est-group.org/) and [PHPHub](https://phphub.org/).
 
-## 安装
+Welcome to follow `LaravelTips` on wechat, this account will focus on the services to serve the laravel developers, we try to help those developers to learning the laravel framework better and faster.
 
-本项目使用 [Laravel](https://laravel.com/docs/5.2) ( [中文文档见此](http://laravel-china.org/docs/5.0) ), 本地开发环境使用 [Homestead](http://laravel-china.org/docs/5.0/homestead) 进行快速部署. 
-下文将在默认读者已经安装好 `Homestead` 情况下进行说明.
+![](http://ww4.sinaimg.cn/large/76dc7f1bjw1f23moqj4qzj20by0bywfa.jpg)
 
-### 1. 克隆代码
+## Installation
 
-    https://github.com/zhengjinghua/est-excel-demo.git
+Require this package in your composer.json and update composer. This will download the package and PHPExcel of PHPOffice.
 
-### 2. 配置本地的 homestead 环境
-
-编辑文件:
-
-    homestead edit
-
-对应加入修改:
-
-    folders:
-        - map: /Users/.../est-excel-demo {你的本地项目地址}
-          to: /home/vagrant/est-excel-demo
-
-    sites:
-        - map: image.app
-          to: /home/vagrant/est-excel-demo/public
-
-    databases:
-        - excel
-
-应用修改:
-
-    homestead provision
-
-### 3. 安装依赖
-
-    composer install
-   
-### 4. 生成配置文件
-
-复制 `.env.example` 为 `.env`
-
-```
-cp .env.example .env
+```shell
+"maatwebsite/excel": "~2.1.0"
 ```
 
-由于此项目没有使用其他复杂的逻辑, 因此无需做其他额外的配置
+After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
-### 5. 修改 hosts
+```php
+'providers' => [
+    ...
+    Maatwebsite\Excel\ExcelServiceProvider::class,
+],
+```
 
-	sudo vi /etc/hosts
+You can use the facade for shorter code. Add this to your aliases:
 
-添加
+```php
+'aliases' => [
+    ...
+    'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+]
+```
 
-	192.168.10.10  	excel.app
-	
-配置完以后浏览器直接访问 http://excel.app 即可
+To publish the config settings in Laravel 5 use:
 
+```shell
+php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
+```
 
+This will add an `excel.php` config file to your config folder.
+
+## Usage
+
+### Decode Excel file
+
+```php
+$excel_data = Excel::load($excel_file_path, function($reader) {
+    $reader = $reader->getSheet(0);
+
+    // print job.xlsx file content
+    echo 'job.xlsx 表格内容为:';
+    dd($reader->toArray());
+});
+```
+
+### Simple Excel Export
+
+```php
+// Export Excel
+Excel::create($export_file_name, function ($excel) {
+    $excel->sheet('Sheetname', function ($sheet) {
+        $sheet->appendRow(['数据 1', '数据 2']);
+        $sheet->appendRow(['数据 3', '数据 4']);
+        $sheet->appendRow(['数据 5', '数据 6']);
+    });
+})->download('xls');
+
+// Export Excel and save it to a specified folder
+Excel::create($export_file_name, function ($excel) {
+    $excel->sheet('Sheetname', function ($sheet) {
+        $sheet->appendRow(['数据 1', '数据 2']);
+        $sheet->appendRow(['数据 3', '数据 4']);
+        $sheet->appendRow(['数据 5', '数据 6']);
+    });
+})->store('xls', $object_path);
+```
+
+Then you can get something like this.
+
+### More usage
+
+You can refer to the [documentation](http://www.maatwebsite.nl/laravel-excel/docs) to learn more about the laravel excel.
