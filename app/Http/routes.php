@@ -11,11 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('import', 'Controller@import');
+Route::get('/', 'Controller@import');
 Route::get('export', 'Controller@export');
 
 /*

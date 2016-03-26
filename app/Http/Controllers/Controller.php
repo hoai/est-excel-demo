@@ -14,15 +14,11 @@ class Controller extends BaseController
 
 
     public function import() {
-        $file_name = public_path().'/excel/job.xlsx';
-        $excel_data = Excel::load($file_name, function($reader) {
-            $reader = $reader->getSheet(0);
+        $file_path  = public_path().'/excel/job.xlsx';
+        $excel_data = Excel::load($file_path)->get()->toArray();
 
-            echo '"job.xlsx" Content is:';
-            dd($reader->toArray());
-        });
+        return view('welcome', compact('excel_data'));
     }
-
 
     public function export() {
         $file_name = time();
