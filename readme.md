@@ -12,6 +12,14 @@ Welcome to follow `LaravelTips` on wechat, this account will focus on the servic
 
 ![](http://ww4.sinaimg.cn/large/76dc7f1bjw1f23moqj4qzj20by0bywfa.jpg)
 
+## Screenshots
+
+![](http://7xrxcg.com1.z0.glb.clouddn.com/b8147ac12661f913f29d670746257ccf.png)
+
+## Run the demo
+
+You can refer to this [documentation](https://github.com/Aufree/laravel-packages-top100/blob/master/how-to-run-a-laravel-project.md) to know how to run this demo.
+
 ## Table of contents
 
 1. Installation
