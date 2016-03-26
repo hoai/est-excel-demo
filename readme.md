@@ -12,6 +12,12 @@ Welcome to follow `LaravelTips` on wechat, this account will focus on the servic
 
 ![](http://ww4.sinaimg.cn/large/76dc7f1bjw1f23moqj4qzj20by0bywfa.jpg)
 
+## Table of contents
+
+1. Installation
+2. Basic Usage
+3. More Usage
+
 ## Installation
 
 Require this package in your composer.json and update composer. This will download the package and PHPExcel of PHPOffice.
@@ -46,17 +52,17 @@ php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
 
 This will add an `excel.php` config file to your config folder.
 
-## Usage
+## Basic Usage
 
 ### Decode Excel file
 
 ```php
+# $excel_file_path = Your excel file path
 $excel_data = Excel::load($excel_file_path, function($reader) {
-    $reader = $reader->getSheet(0);
+    $excel_data = Excel::load($excel_file_path)->get()->toArray();
 
-    // print job.xlsx file content
-    echo 'job.xlsx 表格内容为:';
-    dd($reader->toArray());
+    echo 'job.xlsx contents is:';
+    dd($excel_data);
 });
 ```
 
@@ -84,6 +90,24 @@ Excel::create($export_file_name, function ($excel) {
 
 Then you can get something like this.
 
-### More usage
+### More Usage
 
-You can refer to the [documentation](http://www.maatwebsite.nl/laravel-excel/docs) to learn more about the laravel excel.
+除了上述的解析/导出功能外, 此扩展包还支持:
+
+1. Selecting sheets and columns;
+2. Format Dates;
+3. Calculate formulas;
+4. Caching and Cell caching;
+5. Chunk importer;
+6. Converting;
+7. @Blade to Excel
+
+You can refer to the [documentation](http://www.maatwebsite.nl/laravel-excel/docs/getting-started) to learn more about this package.
+
+---
+
+欢迎关注 `LaravelTips`, 一个专注于为 Laravel 开发者服务, 致力于帮助开发者更好的掌握 Laravel 框架, 提升开发效率的微信公众号.
+
+![](http://ww4.sinaimg.cn/large/76dc7f1bjw1f23moqj4qzj20by0bywfa.jpg)
+
+

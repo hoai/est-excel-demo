@@ -22,6 +22,13 @@ class Controller extends BaseController
 
     public function export() {
         $file_name = time();
+        Excel::create(time(), function ($excel) {
+    $excel->sheet('Sheetname', function ($sheet) {
+        $sheet->appendRow(['data 1', 'data 2']);
+        $sheet->appendRow(['data 3', 'data 4']);
+        $sheet->appendRow(['data 5', 'data 6']);
+    });
+})->download('xls');exit;
         Excel::create($file_name, function ($excel) {
             $excel->sheet('Sheetname', function ($sheet) {
                 // 设置 excel 的 header
