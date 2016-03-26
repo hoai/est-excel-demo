@@ -1,16 +1,14 @@
-## [中文文档阅读](#)
+## For Chinese
+
+* [中文文档请点击这里](#)
 
 ## Description
 
 [Laravel Excel](https://github.com/Maatwebsite/Laravel-Excel) brings the power of PHPOffice's PHPExcel to Laravel 5 with a touch of the Laravel Magic. It includes features like: importing Excel and CSV to collections, exporting models, array's and views to Excel, importing batches of files and importing a file by a config file.
 
-This project is very simple demo to show you how to use the laravel excel package quickly.
+This project is a very simple demo to show you how to use the laravel excel package quickly.
 
 > This project was created by [The EST Group](http://est-group.org/) and [PHPHub](https://phphub.org/).
-
-Welcome to follow `LaravelTips` on wechat, this account will focus on the services to serve the laravel developers, we try to help those developers to learning the laravel framework better and faster.
-
-![](http://ww4.sinaimg.cn/large/76dc7f1bjw1f23moqj4qzj20by0bywfa.jpg)
 
 ## Screenshots
 
@@ -19,6 +17,7 @@ Welcome to follow `LaravelTips` on wechat, this account will focus on the servic
 ## Run the demo
 
 You can refer to this [documentation](https://github.com/Aufree/laravel-packages-top100/blob/master/how-to-run-a-laravel-project.md) to know how to run this demo.
+
 
 ## Table of contents
 
@@ -115,5 +114,3 @@ You can refer to the [documentation](http://www.maatwebsite.nl/laravel-excel/doc
 欢迎关注 `LaravelTips`, 一个专注于为 Laravel 开发者服务, 致力于帮助开发者更好的掌握 Laravel 框架, 提升开发效率的微信公众号.
 
 ![](http://ww4.sinaimg.cn/large/76dc7f1bjw1f23moqj4qzj20by0bywfa.jpg)
-
-
