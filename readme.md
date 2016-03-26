@@ -92,8 +92,6 @@ Then you can get something like this.
 
 ### More Usage
 
-除了上述的解析/导出功能外, 此扩展包还支持:
-
 1. Selecting sheets and columns;
 2. Format Dates;
 3. Calculate formulas;
