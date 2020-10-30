@@ -14,8 +14,21 @@ class Controller extends BaseController
 
 
     public function import() {
-        $file_path  = public_path().'/excel/job.xlsx';
-        $excel_data = Excel::load($file_path)->get()->toArray();
+        //$file_path  = public_path().'/excel/CalclatorTest_VN.xlsx';
+        $file_path  = public_path().'/excel/StringUtilsTest_VN.xlsx';
+        
+       // $excel_data = Excel::load($file_path)->get()->toArray();
+
+        $excel_data = Excel::load($file_path, function($reader) {
+
+            // Getting all results
+            $results = $reader->get();
+
+            // ->all() is a wrapper for ->get() and will work the same
+            $results = $reader->all();
+
+        })->get()->toArray();
+        print_r($excel_data);exit;
 
         return view('welcome', compact('excel_data'));
     }

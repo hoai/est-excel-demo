@@ -363,7 +363,7 @@ return array(
         |
         */
 
-        'heading'                 => 'slugged',
+        'heading'                 => 'false',//'slugged',
 
         /*
         |--------------------------------------------------------------------------
@@ -375,7 +375,7 @@ return array(
         |
         */
 
-        'startRow'                => 1,
+        'startRow'                => 0,//1,
 
         /*
         |--------------------------------------------------------------------------
@@ -455,7 +455,7 @@ return array(
         | When set to true, it will return a sheet collection instead.
         |
         */
-        'force_sheets_collection' => false,
+        'force_sheets_collection' => true, //false,
 
         /*
         |--------------------------------------------------------------------------
