@@ -28,9 +28,92 @@ class Controller extends BaseController
             $results = $reader->all();
 
         })->get()->toArray();
-        print_r($excel_data);exit;
+        //print_r($excel_data);exit;
+        foreach( $excel_data as $sheet_data){
+                $this->createDataExcel($sheet_data);
+        }
+        
 
         return view('welcome', compact('excel_data'));
+    }
+    public function createDataExcel($sheet_data){
+       //echo $sheet_data[2][7] ;exit;
+        //print_r($sheet_data);exit;
+
+        $dataExcel = [
+    "namespace" => $sheet_data[2][7],
+    "use_param" => [
+      'Tests\TestCase',
+        $sheet_data[2][7] . "\\". $sheet_data[3][7],
+     
+      'App\Lib\PwCommon\PwException',
+      'Exception'
+    ],
+     //'App\Lib\PwCommon\Calculator',
+    "class" => $sheet_data[3][7],
+    "extends" => "TestCase",
+    'function' => [
+        $sheet_data[4][7] => [
+            1 => [
+                'param' => null,
+                'param_class' => null,
+                'param_literal' => null,
+                'param_literal_val' => [14, 32],
+                'return' => null,
+                'return_literal' => null,
+                'return_literal_val' => ['expected' => 0.8],
+                'exception' => null,
+                ]
+        ]
+    ],
+];
+            
+            
+            $case_st = false;
+
+            foreach($sheet_data as $index_row => $columns){
+                foreach($columns as $index_colum => $cell){
+                    if($case_st == false && strpos($cell, "#case_st") !== false){
+                        echo 'case_st position: ', $index_row,'-', $index_colum, "\n";
+                        //print_r($columns); //exit; 
+                        $case_st = true;
+                    }
+                    if($case_st && preg_match("/^[\d]+$/", $cell)){
+                        echo 'value position: ', $index_row,'-', $index_colum, "\n";
+                        echo $cell, "\n";
+                    }
+                    if($case_st  && strpos($cell, "#param_literal_val") !== false){
+                        echo '#param_literal_val position: ', $index_row,'-', $index_colum, "\n";
+                        echo $cell, "\n";
+                        echo $sheet_data[$index_row][4], "\n";
+                    }
+                    if($case_st  && strpos($cell, "#return_literal_val") !== false){
+                        echo '#return_literal_val position: ', $index_row,'-', $index_colum, "\n";
+                        echo $cell, "\n";
+                        echo $sheet_data[$index_row][4], "\n";
+                    }
+                    if($case_st  && strpos($cell, "#exception_class") !== false){
+                        echo '#exception_class position: ', $index_row,'-', $index_colum, "\n";
+                        echo $cell, "\n";
+                        echo $sheet_data[$index_row][3], "\n";
+                    }
+                    if($case_st  && strpos($cell, "#exception_code") !== false){
+                        echo '#exception_code position: ', $index_row,'-', $index_colum, "\n";
+                        echo $cell, "\n";
+                        echo $sheet_data[$index_row][4], "\n";
+                    }
+                    if(strpos($cell, "#case_ed") !== false){
+                        echo 'case_ed position: ', $index_row,'-', $index_colum, "\n";
+                        //print_r($columns); //exit; 
+                        $case_st = false;
+
+                        exit;
+                    }
+                }
+            }
+
+            print_r($dataExcel);exit;
+            return $dataExcel;
     }
 
     public function export() {
