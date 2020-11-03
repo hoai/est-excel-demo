@@ -95,9 +95,13 @@ class Controller extends BaseController
                     if($case_st && preg_match("/^[\d]+$/", $cell)){
                         echo 'value position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
-                        $position_case[$cell] = $index_colum;
+                        if(!isset($position_case[$cell])){
+                            $position_case[$cell] = $index_colum;
+                        }
                     }
                     if($case_st  && strpos($cell, "#param_literal_val") !== false){
+                        print_r($position_case);exit;
+
                         echo '#param_literal_val position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
                         echo $sheet_data[$index_row][4], "\n";
@@ -135,6 +139,7 @@ class Controller extends BaseController
                         foreach($position_case as $index_case => $index_colum_case){
                             $list_exception_code[$index_case][$exception_code_name] =  $sheet_data[$index_row][$index_colum_case];
                         }
+                        
 
                     }
                     if($case_st  && strpos($cell, "#case_ed") !== false){
