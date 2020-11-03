@@ -14,8 +14,8 @@ class Controller extends BaseController
 
 
     public function import() {
-        //$file_path  = public_path().'/excel/CalclatorTest_VN.xlsx';
-        $file_path  = public_path().'/excel/StringUtilsTest_VN.xlsx';
+        $file_path  = public_path().'/excel/CalclatorTest_VN.xlsx';
+       // $file_path  = public_path().'/excel/StringUtilsTest_VN.xlsx';
         
        // $excel_data = Excel::load($file_path)->get()->toArray();
 
@@ -39,6 +39,7 @@ class Controller extends BaseController
     public function createDataExcel($sheet_data){
        //echo $sheet_data[2][7] ;exit;
         //print_r($sheet_data);exit;
+        $static = $sheet_data[5][7];
 
         $dataExcel = [
     "namespace" => $sheet_data[2][7],
@@ -71,48 +72,97 @@ class Controller extends BaseController
             
             $case_st = false;
 
+            $list_case_all = [];
+            $position_case_all = [];
+            $list_return_all = [] ;
+            $list_exception_class_all = [] ;
+            $list_exception_code_all = [] ;
+
             foreach($sheet_data as $index_row => $columns){
                 foreach($columns as $index_colum => $cell){
                     if($case_st == false && strpos($cell, "#case_st") !== false){
                         echo 'case_st position: ', $index_row,'-', $index_colum, "\n";
                         //print_r($columns); //exit; 
                         $case_st = true;
+
+                        $list_case = [];
+                        $position_case = [];
+                        $list_return = [] ;
+                        $list_exception_class = [] ;
+                        $list_exception_code = [] ;
+
                     }
                     if($case_st && preg_match("/^[\d]+$/", $cell)){
                         echo 'value position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
+                        $position_case[$cell] = $index_colum;
                     }
                     if($case_st  && strpos($cell, "#param_literal_val") !== false){
                         echo '#param_literal_val position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
                         echo $sheet_data[$index_row][4], "\n";
+                        $param_name = $sheet_data[$index_row][4];
+                        foreach($position_case as $index_case => $index_colum_case){
+                            $list_case[$index_case][$param_name] =  $sheet_data[$index_row][$index_colum_case];
+                        }
                     }
                     if($case_st  && strpos($cell, "#return_literal_val") !== false){
                         echo '#return_literal_val position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
                         echo $sheet_data[$index_row][4], "\n";
+                        $return_literal_name = $sheet_data[$index_row][4];
+                        foreach($position_case as $index_case => $index_colum_case){
+                            $list_return[$index_case][$return_literal_name] =  $sheet_data[$index_row][$index_colum_case];
+                        }
                     }
                     if($case_st  && strpos($cell, "#exception_class") !== false){
                         echo '#exception_class position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
                         echo $sheet_data[$index_row][3], "\n";
+
+                        $exception_class_name = $sheet_data[$index_row][3];
+                        foreach($position_case as $index_case => $index_colum_case){
+                            $list_exception_class[$index_case][$exception_class_name] =  $sheet_data[$index_row][$index_colum_case];
+                        }
+
                     }
                     if($case_st  && strpos($cell, "#exception_code") !== false){
                         echo '#exception_code position: ', $index_row,'-', $index_colum, "\n";
                         echo $cell, "\n";
                         echo $sheet_data[$index_row][4], "\n";
+
+                         $exception_code_name = $sheet_data[$index_row][4];
+                        foreach($position_case as $index_case => $index_colum_case){
+                            $list_exception_code[$index_case][$exception_code_name] =  $sheet_data[$index_row][$index_colum_case];
+                        }
+
                     }
-                    if(strpos($cell, "#case_ed") !== false){
+                    if($case_st  && strpos($cell, "#case_ed") !== false){
                         echo 'case_ed position: ', $index_row,'-', $index_colum, "\n";
                         //print_r($columns); //exit; 
                         $case_st = false;
 
-                        exit;
+                        $list_case_all = array_merge($list_case_all, array_values($list_case));
+                        $position_case_all = array_merge($position_case_all, array_values($position_case));
+                        $list_return_all = array_merge($list_return_all, array_values($list_return) );
+                        $list_exception_class_all = array_merge($list_exception_class_all, array_values($list_exception_class) );
+                        $list_exception_code_all = array_merge($list_exception_code_all, array_values($list_exception_code) );
+
+                        //print_r($list_case);
+                       //print_r($list_return);
+                        
+                       //exit;
+
+                        //exit;
                     }
                 }
             }
 
-            print_r($dataExcel);exit;
+            print_r($list_case_all);
+            print_r($list_return_all);
+            print_r($list_exception_class_all);
+            print_r($list_exception_code_all);
+            exit;
             return $dataExcel;
     }
 
