@@ -118,17 +118,18 @@ class Controller extends BaseController
 
                         $exception_class_name = $sheet_data[$index_row][3];
 
-                        if(!in_array($path_class . "\\". $exception_class_name, $dataExcel['use_param'])){
-                            $dataExcel['use_param'][] = $path_class . "\\". $exception_class_name;
-                        }
+                        if(!empty($exception_class_name)){
+                            if(!in_array($path_class . "\\". $exception_class_name, $dataExcel['use_param'])){
+                                $dataExcel['use_param'][] = $path_class . "\\". $exception_class_name;
+                            }
                          
 
-                        //print_r($position_case);exit;
-                        foreach($position_case as $index_case => $index_colum_case){
-                            $list_exception_class[$index_case][$exception_class_name] =  $sheet_data[$index_row][$index_colum_case];
-                        }
+                            //print_r($position_case);exit;
+                            foreach($position_case as $index_case => $index_colum_case){
+                                $list_exception_class[$index_case][$exception_class_name] =  $sheet_data[$index_row][$index_colum_case];
+                            }
                           //print_r($list_exception_class);exit;
-
+                        }
                     }
                     if($case_st  && strpos($cell, "#exception_code") !== false){
                         echo '#exception_code position: ', $index_row,'-', $index_colum, "\n";
@@ -181,9 +182,9 @@ class Controller extends BaseController
                                 'param_literal_val' => $param_value,
                                 'return' => null,
                                 'return_literal' => null,
-                                'return_literal_val' => $list_return_all[$index_case],
-                                'exception_class' => $list_exception_class_all[$index_case],
-                                'exception_code' => $list_exception_code_all[$index_case],
+                                'return_literal_val' => isset($list_return_all[$index_case]) ? $list_return_all[$index_case] : null,
+                                'exception_class' => isset($list_exception_class_all[$index_case]) ? $list_exception_class_all[$index_case] : null,
+                                'exception_code' => isset( $list_exception_code_all[$index_case] ) ?  $list_exception_code_all[$index_case]  : null,
                             ];
             }
             print_r($dataExcel);exit;
