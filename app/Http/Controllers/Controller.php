@@ -40,33 +40,23 @@ class Controller extends BaseController
        //echo $sheet_data[2][7] ;exit;
         //print_r($sheet_data);exit;
         $static = $sheet_data[5][7];
+        $function_name = $sheet_data[4][7];
+        $path_class =  $sheet_data[2][7] ;
+        $main_class = $sheet_data[3][7];
 
+       
         $dataExcel = [
     "namespace" => $sheet_data[2][7],
     "use_param" => [
       'Tests\TestCase',
-        $sheet_data[2][7] . "\\". $sheet_data[3][7],
+       $path_class . "\\". $main_class,
      
-      'App\Lib\PwCommon\PwException',
+      //'App\Lib\PwCommon\PwException',
       'Exception'
     ],
      //'App\Lib\PwCommon\Calculator',
     "class" => $sheet_data[3][7],
-    "extends" => "TestCase",
-    'function' => [
-        $sheet_data[4][7] => [
-            1 => [
-                'param' => null,
-                'param_class' => null,
-                'param_literal' => null,
-                'param_literal_val' => [14, 32],
-                'return' => null,
-                'return_literal' => null,
-                'return_literal_val' => ['expected' => 0.8],
-                'exception' => null,
-                ]
-        ]
-    ],
+    "extends" => "TestCase"
 ];
             
             
@@ -127,6 +117,12 @@ class Controller extends BaseController
                         echo $sheet_data[$index_row][3], "\n";
 
                         $exception_class_name = $sheet_data[$index_row][3];
+
+                        if(!in_array($path_class . "\\". $exception_class_name, $dataExcel['use_param'])){
+                            $dataExcel['use_param'][] = $path_class . "\\". $exception_class_name;
+                        }
+                         
+
                         //print_r($position_case);exit;
                         foreach($position_case as $index_case => $index_colum_case){
                             $list_exception_class[$index_case][$exception_class_name] =  $sheet_data[$index_row][$index_colum_case];
@@ -171,11 +167,27 @@ class Controller extends BaseController
                 }
             }
 
-            print_r($list_case_all);
+            /*print_r($list_case_all);
             print_r($list_return_all);
             print_r($list_exception_class_all);
             print_r($list_exception_code_all);
-            exit;
+            exit;*/
+            foreach ($list_case_all as $index_case => $param_value){
+                        $dataExcel['function'][$function_name][$index_case + 1] =
+                            [
+                                'param' => null,
+                                'param_class' => null,
+                                'param_literal' => null,
+                                'param_literal_val' => $param_value,
+                                'return' => null,
+                                'return_literal' => null,
+                                'return_literal_val' => $list_return_all[$index_case],
+                                'exception_class' => $list_exception_class_all[$index_case],
+                                'exception_code' => $list_exception_code_all[$index_case],
+                            ];
+            }
+            print_r($dataExcel);exit;
+
             return $dataExcel;
     }
 
