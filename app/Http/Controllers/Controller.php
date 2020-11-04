@@ -14,8 +14,8 @@ class Controller extends BaseController
 
 
     public function import() {
-        $file_path  = public_path().'/excel/CalclatorTest_VN.xlsx';
-       // $file_path  = public_path().'/excel/StringUtilsTest_VN.xlsx';
+        //$file_path  = public_path().'/excel/CalclatorTest_VN.xlsx';
+        $file_path  = public_path().'/excel/StringUtilsTest_VN.xlsx';
         
        // $excel_data = Excel::load($file_path)->get()->toArray();
 
@@ -29,35 +29,58 @@ class Controller extends BaseController
 
         })->get()->toArray();
         //print_r($excel_data);exit;
+        $dataExcel = [];
         foreach( $excel_data as $sheet_data){
-                $this->createDataExcel($sheet_data);
+               $dataExcel =  array_merge($dataExcel, $this->createDataExcel($sheet_data, $dataExcel));
+               // $dataExcel =  $this->createDataExcel($sheet_data);
+                // print_r($dataExcel);
         }
+
+        print_r($dataExcel); exit;
         
 
         return view('welcome', compact('excel_data'));
     }
-    public function createDataExcel($sheet_data){
-       //echo $sheet_data[2][7] ;exit;
+    public function createDataExcel($sheet_data , $dataExcel){
+       ////echo $sheet_data[2][7] ;exit;
         //print_r($sheet_data);exit;
+        //check exist cell #namespace
+       // print_r();
+        $namespace_cell =  $sheet_data[2][0];
+        if($namespace_cell !=  '#namespace'){
+            return [];
+        }
         $static = $sheet_data[5][7];
         $function_name = $sheet_data[4][7];
         $path_class =  $sheet_data[2][7] ;
         $main_class = $sheet_data[3][7];
 
-       
-        $dataExcel = [
-    "namespace" => $sheet_data[2][7],
-    "use_param" => [
-      'Tests\TestCase',
-       $path_class . "\\". $main_class,
+      
+        if(empty($dataExcel) ){
+
+            $dataExcel = [
+                "namespace" => $sheet_data[2][7],
+                "use_param" => [
+                  'Tests\TestCase',
+                   $path_class . "\\". $main_class,
      
-      //'App\Lib\PwCommon\PwException',
-      'Exception'
-    ],
-     //'App\Lib\PwCommon\Calculator',
-    "class" => $sheet_data[3][7],
-    "extends" => "TestCase"
-];
+                  //'App\Lib\PwCommon\PwException',
+                  'Exception'
+                ],
+                 //'App\Lib\PwCommon\Calculator',
+                "class" => $sheet_data[3][7],
+                "extends" => "TestCase"
+            ];
+            
+        }
+        else{
+            if(!in_array($path_class . "\\". $main_class, $dataExcel["use_param"])){
+                $dataExcel['use_param'] =  $path_class . "\\". $main_class;
+
+            }
+
+        }
+        
             
             
             $case_st = false;
@@ -71,7 +94,7 @@ class Controller extends BaseController
             foreach($sheet_data as $index_row => $columns){
                 foreach($columns as $index_colum => $cell){
                     if($case_st == false && strpos($cell, "#case_st") !== false){
-                        echo 'case_st position: ', $index_row,'-', $index_colum, "\n";
+                        //echo 'case_st position: ', $index_row,'-', $index_colum, "\n";
                         //print_r($columns); //exit; 
                         $case_st = true;
 
@@ -83,8 +106,8 @@ class Controller extends BaseController
 
                     }
                     if($case_st && preg_match("/^[\d]+$/", $cell)){
-                        echo 'value position: ', $index_row,'-', $index_colum, "\n";
-                        echo $cell, "\n";
+                        //echo 'value position: ', $index_row,'-', $index_colum, "\n";
+                        //echo $cell, "\n";
                         if(!isset($position_case[$cell]) && $cell > 0){
                             $position_case[$cell] = $index_colum;
                         }
@@ -92,9 +115,9 @@ class Controller extends BaseController
                     if($case_st  && strpos($cell, "#param_literal_val") !== false){
                        
 
-                        echo '#param_literal_val position: ', $index_row,'-', $index_colum, "\n";
-                        echo $cell, "\n";
-                        echo $sheet_data[$index_row][4], "\n";
+                        //echo '#param_literal_val position: ', $index_row,'-', $index_colum, "\n";
+                        //echo $cell, "\n";
+                        //echo $sheet_data[$index_row][4], "\n";
                         $param_name = $sheet_data[$index_row][4];
                         foreach($position_case as $index_case => $index_colum_case){
                             $list_case[$index_case][$param_name] =  $sheet_data[$index_row][$index_colum_case];
@@ -102,9 +125,9 @@ class Controller extends BaseController
                       
                     }
                     if($case_st  && strpos($cell, "#return_literal_val") !== false){
-                        echo '#return_literal_val position: ', $index_row,'-', $index_colum, "\n";
-                        echo $cell, "\n";
-                        echo $sheet_data[$index_row][4], "\n";
+                        //echo '#return_literal_val position: ', $index_row,'-', $index_colum, "\n";
+                        //echo $cell, "\n";
+                        //echo $sheet_data[$index_row][4], "\n";
                         $return_literal_name = $sheet_data[$index_row][4];
                         foreach($position_case as $index_case => $index_colum_case){
                             $list_return[$index_case][$return_literal_name] =  $sheet_data[$index_row][$index_colum_case];
@@ -112,9 +135,9 @@ class Controller extends BaseController
                          
                     }
                     if($case_st  && strpos($cell, "#exception_class") !== false){
-                        echo '#exception_class position: ', $index_row,'-', $index_colum, "\n";
-                        echo $cell, "\n";
-                        echo $sheet_data[$index_row][3], "\n";
+                        //echo '#exception_class position: ', $index_row,'-', $index_colum, "\n";
+                        //echo $cell, "\n";
+                        //echo $sheet_data[$index_row][3], "\n";
 
                         $exception_class_name = $sheet_data[$index_row][3];
 
@@ -132,9 +155,9 @@ class Controller extends BaseController
                         }
                     }
                     if($case_st  && strpos($cell, "#exception_code") !== false){
-                        echo '#exception_code position: ', $index_row,'-', $index_colum, "\n";
-                        echo $cell, "\n";
-                        echo $sheet_data[$index_row][4], "\n";
+                        //echo '#exception_code position: ', $index_row,'-', $index_colum, "\n";
+                        //echo $cell, "\n";
+                        //echo $sheet_data[$index_row][4], "\n";
 
                          $exception_code_name = $sheet_data[$index_row][4];
 
@@ -148,7 +171,7 @@ class Controller extends BaseController
 
                     }
                     if($case_st  && strpos($cell, "#case_ed") !== false){
-                        echo 'case_ed position: ', $index_row,'-', $index_colum, "\n";
+                        //echo 'case_ed position: ', $index_row,'-', $index_colum, "\n";
                         //print_r($columns); //exit; 
                         $case_st = false;
 
@@ -187,7 +210,7 @@ class Controller extends BaseController
                                 'exception_code' => isset( $list_exception_code_all[$index_case] ) ?  $list_exception_code_all[$index_case]  : null,
                             ];
             }
-            print_r($dataExcel);exit;
+            //print_r($dataExcel);exit;
 
             return $dataExcel;
     }
